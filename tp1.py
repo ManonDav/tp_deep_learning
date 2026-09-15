@@ -28,33 +28,35 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Recherche dichotomique
+        question="""# Regroupement d'anagrammes
 
 Implémentez une fonction :
 
 ```python
-def binary_search(xs, target) -> int:
+def group_anagrams(words) -> list:
 ```
 
-qui renvoie l'indice de `target` dans la liste triée `xs`, ou `-1` si `target` n'y figure pas.
+qui reçoit une liste de chaînes et renvoie une liste de groupes : chacun contient les mots qui
+sont des anagrammes les uns des autres (mêmes lettres, même nombre d'occurrences, casse
+insensible).
 
 Règles précises :
-- `xs` est une liste **triée en ordre croissant** d'entiers (vous pouvez la supposer triée).
-- La fonction doit utiliser l'algorithme de **recherche dichotomique** en `O(log n)` :
-  elle doit diviser l'espace de recherche en deux à chaque itération en comparant `target` à
-  l'élément médian. Un parcours linéaire (`target in xs`, `xs.index`, boucle simple) n'est pas
-  acceptable.
-- S'il y a plusieurs occurrences, renvoyer n'importe quelle position valide.
-- Une liste vide renvoie `-1`.
+- Deux mots sont des anagrammes s'ils ont exactement les mêmes lettres avec les mêmes
+  fréquences, en ignorant la casse (`"Tea"` et `"eat"` sont des anagrammes).
+- La comparaison doit ignorer la casse, mais les mots du groupe sont renvoyés **tels quels**
+  (casse d'origine préservée).
+- L'ordre des groupes et l'ordre des mots dans chaque groupe ont la liberté : les résultats ne
+  sont vérifiés que comme ensembles de groupes.
+- Les chaînes non vides n'ont que des caractères alphabétiques.
 
 ## Exemples
 
 ```python
-binary_search([-5, 0, 3, 7, 9, 11], 7)   # 3
-binary_search([1, 2, 3, 4, 5], 1)        # 0
-binary_search([1, 2, 3, 4, 5], 5)        # 4
-binary_search([1, 2, 3, 4, 5], 0)        # -1
-binary_search([], 3)                     # -1
+group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"])
+# ex. [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
+group_anagrams([])                       # []
+group_anagrams(["abc"])                  # [["abc"]]
+group_anagrams(["Tea", "ate", "EAT"])    # ex. [["Tea", "ate", "EAT"]]
 ```
 """).reponse
 )
