@@ -28,30 +28,34 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Élément le plus fréquent
+        question="""# Parenthèses équilibrées
 
 Implémentez une fonction :
 
 ```python
-def most_frequent(xs):
+def is_balanced(s: str) -> bool:
 ```
 
-qui renvoie l'élément le plus fréquent d'une liste non vide.
+qui détermine si les parenthèses, crochets et accolades de `s` sont correctement imbriqués et
+équilibrés. Seuls ces trois types de délimiteurs comptent : les autres caractères sont ignorés.
 
 Règles précises :
-- En cas d'égalité (plusieurs éléments ayant la même fréquence maximale), renvoyer celui qui
-  apparaît **en premier** dans la liste.
-- La liste est garantie non vide (vous n'avez pas à gérer le cas vide).
-- Les éléments peuvent être de tout type hachable (entiers, chaînes).
+- Chaque ouverture `(`, `[`, `{` doit être fermée par son délimiteur correspondant `)`, `]`, `}`.
+- La fermeture doit respecter l'ordre d'imbrication (une fermeture doit correspondre à
+  l'ouverture la plus récente non fermée).
+- Une chaîne sans délimiteur (ou vide) est considérée comme équilibrée (`True`).
 
 ## Exemples
 
 ```python
-most_frequent([1, 3, 1, 2, 3, 1])   # 1
-most_frequent([3, 1, 3, 1])          # 3  (3 et 1 ex æquo, 3 apparaît en premier)
-most_frequent(["a", "b", "a"])       # "a"
-most_frequent([7])                    # 7
+is_balanced("()")                # True
+is_balanced("()[]{}")            # True
+is_balanced("({[]})")            # True
+is_balanced("(]")                # False
+is_balanced("([)]")              # False
+is_balanced("((())")            # False  (3 ouvertures, 2 fermetures)
+is_balanced("")                  # True
+is_balanced("abc")               # True  (aucun délimiteur)
 ```
-
 """).reponse
 )
