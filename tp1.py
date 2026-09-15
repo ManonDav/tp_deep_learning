@@ -28,38 +28,34 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Analyse d'une ligne CSV
+        question="""# Deux nombres dont la somme est cible
 
 Implémentez une fonction :
 
 ```python
-def parse_csv_line(line: str) -> list:
+def two_sum(nums, target) -> list:
 ```
 
-qui découpe une ligne de fichier CSV en une liste de champs (chaînes).
+qui reçoit une liste d'entiers `nums` et un entier `target`, et renvoie les **indices** des deux
+éléments distincts dont la somme est égale à `target`.
 
 Règles précises :
-- Les champs sont séparés par des virgules.
-- Un champ peut être entouré de guillemets doubles `"`. Dans ce cas :
-  - une virgule ou un retour à la ligne à l'intérieur des guillemets ne termine pas le champ ;
-  - deux guillemets consécutifs `""` à l'intérieur d'un champ entre guillemets représentent un
-    guillemet littéral dans la valeur.
-- Un champ non entre guillemets ne contient pas de guillemets : toute valeur contenant un
-  guillemet est entre guillemets.
-- Les guillemets qui entourent un champ ne font **pas** partie de la valeur renvoyée.
-- Chaque ligne est bien formée (les guillemets ouvrants ont toujours un fermant) : vous n'avez
-  pas à gérer les lignes mal formées.
-- Une ligne vide ou constituée seulement d'une virgule donne `[""]` ou `["", ""]` : chaque
-  position séparée par une virgule donne un champ, même vide.
+- On garantit qu'il existe **exactement une** paire de valeurs distinctes dont la somme vaut
+  `target`. Vous n'avez pas à gérer l'absence de solution.
+- L'ordre des deux indices renvoyés importe peu, mais les deux indices doivent être **distincts**
+  et renvoyés dans une liste.
+- Les deux éléments peuvent avoir la même valeur (ex. `[3, 3]` avec `target = 6`), mais il s'agit
+  alors de deux positions différentes.
+- Une implémentation en `O(n²)` (double boucle) fonctionne, mais une implémentation en `O(n)`
+  à l'aide d'un dictionnaire est préférée.
 
 ## Exemples
 
 ```python
-parse_csv_line("a,b,c")                # ["a", "b", "c"]
-parse_csv_line("a,\"b,c\",d")           # ["a", "b,c", "d"]
-parse_csv_line("\"hello \"\"world\"\"\"")  # ["hello \"world\""]
-parse_csv_line("1,2,3")                # ["1", "2", "3"]
-parse_csv_line("a,")                   # ["a", ""]
+two_sum([2, 7, 11, 15], 9)   # [0, 1]
+two_sum([3, 2, 4], 6)        # [1, 2]
+two_sum([3, 3], 6)           # [0, 1]
+two_sum([1, 2, 3], 5)        # [1, 2]
 ```
 """).reponse
 )
