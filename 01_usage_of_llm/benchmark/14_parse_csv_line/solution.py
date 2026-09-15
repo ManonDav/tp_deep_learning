@@ -40,5 +40,4 @@ def parse_csv_line(line: str) -> list:
     # Add the last field
     fields.append(current_field)
 
-    # Handle empty fields (e.g., ",")
     return fields
