@@ -28,32 +28,38 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Fibonacci efficace
+        question="""# Analyse d'une ligne CSV
 
 Implémentez une fonction :
 
 ```python
-def fibonacci(n: int) -> int:
+def parse_csv_line(line: str) -> list:
 ```
 
-qui renvoie le `n`-ième nombre de Fibonacci, avec `F(0) = 0` et `F(1) = 1`.
+qui découpe une ligne de fichier CSV en une liste de champs (chaînes).
 
 Règles précises :
-- `n` est un entier positif ou nul (`0 <= n`).
-- La fonction doit être **efficace** : elle doit traiter `n = 100` quasi instantanément.
-  Une implémentation naïvement récursive (appels redondants, complexité exponentielle) n'est
-  pas acceptable. Utilisez une itération, la programmation dynamique, ou la récursion avec
-  mémoïsation.
-- `F(0) = 0`, `F(1) = 1`, `F(2) = 1`, `F(10) = 55`.
+- Les champs sont séparés par des virgules.
+- Un champ peut être entouré de guillemets doubles `"`. Dans ce cas :
+  - une virgule ou un retour à la ligne à l'intérieur des guillemets ne termine pas le champ ;
+  - deux guillemets consécutifs `""` à l'intérieur d'un champ entre guillemets représentent un
+    guillemet littéral dans la valeur.
+- Un champ non entre guillemets ne contient pas de guillemets : toute valeur contenant un
+  guillemet est entre guillemets.
+- Les guillemets qui entourent un champ ne font **pas** partie de la valeur renvoyée.
+- Chaque ligne est bien formée (les guillemets ouvrants ont toujours un fermant) : vous n'avez
+  pas à gérer les lignes mal formées.
+- Une ligne vide ou constituée seulement d'une virgule donne `[""]` ou `["", ""]` : chaque
+  position séparée par une virgule donne un champ, même vide.
 
 ## Exemples
 
 ```python
-fibonacci(0)    # 0
-fibonacci(1)    # 1
-fibonacci(2)    # 1
-fibonacci(10)   # 55
-fibonacci(100)  # 354224848179261915075
+parse_csv_line("a,b,c")                # ["a", "b", "c"]
+parse_csv_line("a,\"b,c\",d")           # ["a", "b,c", "d"]
+parse_csv_line("\"hello \"\"world\"\"\"")  # ["hello \"world\""]
+parse_csv_line("1,2,3")                # ["1", "2", "3"]
+parse_csv_line("a,")                   # ["a", ""]
 ```
 """).reponse
 )
