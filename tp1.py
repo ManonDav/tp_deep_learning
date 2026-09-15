@@ -28,30 +28,30 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Aplatissement de liste
+        question="""# Élément le plus fréquent
 
 Implémentez une fonction :
 
 ```python
-def flatten(xs):
+def most_frequent(xs):
 ```
 
-qui aplatit récursivement une liste de listes (potentiellement imbriquées de façon arbitraire)
-en une liste plate à une seule dimension, en préservant l'ordre des éléments.
+qui renvoie l'élément le plus fréquent d'une liste non vide.
 
 Règles précises :
-- Les éléments non-listes sont conservés tels quels dans l'ordre.
-- Les listes vides imbriquées ne produisent aucun élément.
-- Si `xs` n'est pas une liste (par exemple un entier ou une chaîne), la fonction doit lever une
-  exception de type `TypeError`.
+- En cas d'égalité (plusieurs éléments ayant la même fréquence maximale), renvoyer celui qui
+  apparaît **en premier** dans la liste.
+- La liste est garantie non vide (vous n'avez pas à gérer le cas vide).
+- Les éléments peuvent être de tout type hachable (entiers, chaînes).
 
 ## Exemples
 
 ```python
-flatten([])                      # []
-flatten([1, 2, 3])               # [1, 2, 3]
-flatten([1, [2, [3, [4]], 5]])   # [1, 2, 3, 4, 5]
-flatten([[1, 2], [], [3]])       # [1, 2, 3]
+most_frequent([1, 3, 1, 2, 3, 1])   # 1
+most_frequent([3, 1, 3, 1])          # 3  (3 et 1 ex æquo, 3 apparaît en premier)
+most_frequent(["a", "b", "a"])       # "a"
+most_frequent([7])                    # 7
 ```
+
 """).reponse
 )
