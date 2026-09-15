@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("07_merge_intervals")
-implementation= evaluator.test_implementation("07_merge_intervals", """def merge_intervals(intervals):
+code = """def merge_intervals(intervals):
     if not intervals:
         return []
     
@@ -19,5 +19,6 @@ implementation= evaluator.test_implementation("07_merge_intervals", """def merge
         else:
             merged.append(current)
 
-    return merged""")
+    return merged"""
+implementation= evaluator.test_implementation("07_merge_intervals", code)
 print(implementation)

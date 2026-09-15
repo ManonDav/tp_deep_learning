@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("03_flatten")
-implementation= evaluator.test_implementation("03_flatten", """def flatten(xs):
+code = """def flatten(xs):
     if not isinstance(xs, list):
         raise TypeError("Input must be a list")
 
@@ -12,5 +12,6 @@ implementation= evaluator.test_implementation("03_flatten", """def flatten(xs):
             result.extend(flatten(item))
         else:
             result.append(item)
-    return result""")
+    return result"""
+implementation= evaluator.test_implementation("03_flatten", code)
 print(implementation)

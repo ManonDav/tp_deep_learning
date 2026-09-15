@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("16_longest_common_prefix")
-implementation= evaluator.test_implementation("16_longest_common_prefix", """def longest_common_prefix(strs) -> str:
+code = """def longest_common_prefix(strs) -> str:
     if not strs:
         return ""
 
@@ -12,5 +12,6 @@ implementation= evaluator.test_implementation("16_longest_common_prefix", """def
             prefix = prefix[:-1]
             if not prefix:
                 return ""
-    return prefix""")
+    return prefix"""
+implementation= evaluator.test_implementation("16_longest_common_prefix", code)
 print(implementation)

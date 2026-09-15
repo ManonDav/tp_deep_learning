@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("09_int_to_roman")
-implementation= evaluator.test_implementation("09_int_to_roman", """def int_to_roman(n: int) -> str:
+code = """def int_to_roman(n: int) -> str:
     val = [
         (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'),
         (100, 'C'), (90, 'XC'), (50, 'L'), (40, 'XL'),
@@ -14,5 +14,6 @@ implementation= evaluator.test_implementation("09_int_to_roman", """def int_to_r
         while n >= value:
             res += symbol
             n -= value
-    return res""")
+    return res"""
+implementation= evaluator.test_implementation("09_int_to_roman", code)
 print(implementation)

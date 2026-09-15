@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("02_run_length_encode")
-implementation= evaluator.test_implementation("02_run_length_encode", """def run_length_encode(s: str) -> str:
+code = """def run_length_encode(s: str) -> str:
     if not s:
         return ""
     result = []
@@ -16,5 +16,6 @@ implementation= evaluator.test_implementation("02_run_length_encode", """def run
             current_char = char
             count = 1
     result.append(f"{count}{current_char}")
-    return ''.join(result)""")
+    return ''.join(result)"""
+implementation= evaluator.test_implementation("02_run_length_encode", code )
 print(implementation)

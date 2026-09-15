@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("12_word_frequencies")
-implementation= evaluator.test_implementation("12_word_frequencies", """import re
+code = """import re
 from collections import defaultdict
 
 def word_frequencies(text: str) -> dict:
@@ -18,5 +18,6 @@ def word_frequencies(text: str) -> dict:
         freq[word] += 1
 
     # Conversion en dict standard
-    return dict(freq)""")
+    return dict(freq)"""
+implementation= evaluator.test_implementation("12_word_frequencies", code)
 print(implementation)

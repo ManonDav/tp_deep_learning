@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("06_caesar_cipher")
-implementation= evaluator.test_implementation("06_caesar_cipher", """def caesar_cipher(s: str, shift: int) -> str:
+code = """def caesar_cipher(s: str, shift: int) -> str:
     result = ""
     shift = shift % 26  # Appliquer le modulo 26 pour gérer les décalages négatifs ou supérieurs à 25
     
@@ -20,5 +20,6 @@ implementation= evaluator.test_implementation("06_caesar_cipher", """def caesar_
         else:
             # Conserver les caractères non alphabétiques inchangés
             result += char
-    return result""")
+    return result"""
+implementation= evaluator.test_implementation("06_caesar_cipher", code)
 print(implementation)

@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("11_group_anagrams")
-implementation= evaluator.test_implementation("11_group_anagrams", """def group_anagrams(words) -> list:
+code = """def group_anagrams(words) -> list:
     if not words:
         return []
     
@@ -18,5 +18,6 @@ implementation= evaluator.test_implementation("11_group_anagrams", """def group_
         anagram_groups[key].append(word)
 
     # Retourner la liste des groupes
-    return list(anagram_groups.values())""")
+    return list(anagram_groups.values())"""
+implementation= evaluator.test_implementation("11_group_anagrams", code)
 print(implementation)

@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("14_parse_csv_line")
-implementation= evaluator.test_implementation("14_parse_csv_line", """def parse_csv_line(line: str) -> list:
+code = """def parse_csv_line(line: str) -> list:
     fields = []
     i = 0
     n = len(line)
@@ -41,5 +41,6 @@ implementation= evaluator.test_implementation("14_parse_csv_line", """def parse_
                 i += 1
             fields.append(field)
             i += 1  # Skip the comma
-    return fields""")
+    return fields"""
+implementation= evaluator.test_implementation("14_parse_csv_line",code )
 print(implementation)

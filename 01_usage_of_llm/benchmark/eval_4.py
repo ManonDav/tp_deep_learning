@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("04_most_frequent")
-implementation= evaluator.test_implementation("04_most_frequent", """def most_frequent(xs):
+code = """def most_frequent(xs):
     frequency = {}
     max_freq = 0
     most_freq_element = None
@@ -16,5 +16,6 @@ implementation= evaluator.test_implementation("04_most_frequent", """def most_fr
         elif frequency[element] == max_freq and most_freq_element is None:
             most_freq_element = element
 
-    return most_freq_element""")
+    return most_freq_element"""
+implementation= evaluator.test_implementation("04_most_frequent", code)
 print(implementation)

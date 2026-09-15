@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("10_binary_search")
-implementation= evaluator.test_implementation("10_binary_search", """def binary_search(xs, target) -> int:
+code = """def binary_search(xs, target) -> int:
     left = 0
     right = len(xs) - 1
 
@@ -15,5 +15,6 @@ implementation= evaluator.test_implementation("10_binary_search", """def binary_
         else:
             right = mid - 1
 
-    return -1""")
+    return -1"""
+implementation= evaluator.test_implementation("10_binary_search", code)
 print(implementation)

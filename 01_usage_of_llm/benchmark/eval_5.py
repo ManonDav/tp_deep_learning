@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("05_is_balanced")
-implementation= evaluator.test_implementation("05_is_balanced", """def is_balanced(s: str) -> bool:
+code = """def is_balanced(s: str) -> bool:
     stack = []
     mapping = {')': '(', ']': '[', '}': '{'}
 
@@ -12,5 +12,6 @@ implementation= evaluator.test_implementation("05_is_balanced", """def is_balanc
         elif char in mapping.keys():
             if not stack or stack.pop() != mapping[char]:
                 return False
-    return not stack""")
+    return not stack"""
+implementation= evaluator.test_implementation("05_is_balanced", code)
 print(implementation)

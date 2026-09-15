@@ -2,7 +2,7 @@ import evaluator
 
 
 task = evaluator.get_task_description("08_roman_to_int")
-implementation= evaluator.test_implementation("08_roman_to_int", """def roman_to_int(s: str) -> int:
+code = """def roman_to_int(s: str) -> int:
     roman_to_value = {
         'I': 1,
         'V': 5,
@@ -23,5 +23,6 @@ implementation= evaluator.test_implementation("08_roman_to_int", """def roman_to
             total += value
         prev_value = value
 
-    return total""")
+    return total"""
+implementation= evaluator.test_implementation("08_roman_to_int",code)
 print(implementation)
