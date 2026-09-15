@@ -28,33 +28,33 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Romain → entier
+        question="""# Entier → romain
 
 Implémentez une fonction :
 
 ```python
-def roman_to_int(s: str) -> int:
+def int_to_roman(n: int) -> str:
 ```
 
-qui convertit un nombre écrit en chiffres romains en entier.
+qui convertit un entier strictement positif en chaîne de chiffres romains.
 
 Règles précises :
-- L'entrée est une chaîne non vide composée uniquement de caractères romains valides
-  (`I, V, X, L, C, D, M`, en majuscules).
-- On utilise la convention soustractive standard : `IV` vaut 4, `IX` vaut 9, `XL` vaut 40,
-  `XC` vaut 90, `CD` vaut 400, `CM` vaut 900.
-- Un symbole placé avant un symbole de valeur supérieure se soustrait ; sinon il s'additionne.
+- `n` est un entier tel que `1 <= n < 4000`.
+- On utilise la convention soustractive standard : `4` s'écrit `IV`, `9` s'écrit `IX`,
+  `40` s'écrit `XL`, `90` s'écrit `XC`, `400` s'écrit `CD`, `900` s'écrit `CM`.
+- Les symboles sont uniquement des majuscules.
 
-Valeurs de base : `I=1, V=5, X=10, L=50, C=100, D=500, M=1000`.
+Symboles disponibles : `I=1, V=5, X=10, L=50, C=100, D=500, M=1000`.
 
 ## Exemples
 
 ```python
-roman_to_int("III")    # 3
-roman_to_int("IV")     # 4
-roman_to_int("IX")     # 9
-roman_to_int("LVIII")  # 58
-roman_to_int("MCMXCIV")  # 1994
+int_to_roman(3)      # "III"
+int_to_roman(4)      # "IV"
+int_to_roman(9)      # "IX"
+int_to_roman(58)     # "LVIII"
+int_to_roman(1994)   # "MCMXCIV"
+int_to_roman(1)      # "I"
 ```
 """).reponse
 )
