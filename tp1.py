@@ -28,34 +28,32 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Parenthèses équilibrées
+        question="""# Chiffrement de César
 
 Implémentez une fonction :
 
 ```python
-def is_balanced(s: str) -> bool:
+def caesar_cipher(s: str, shift: int) -> str:
 ```
 
-qui détermine si les parenthèses, crochets et accolades de `s` sont correctement imbriqués et
-équilibrés. Seuls ces trois types de délimiteurs comptent : les autres caractères sont ignorés.
+qui chiffre `s` avec un décalage de César de `shift` positions dans l'alphabet (a → z).
+`shift` est un entier pouvant être négatif ou supérieur à 25.
 
 Règles précises :
-- Chaque ouverture `(`, `[`, `{` doit être fermée par son délimiteur correspondant `)`, `]`, `}`.
-- La fermeture doit respecter l'ordre d'imbrication (une fermeture doit correspondre à
-  l'ouverture la plus récente non fermée).
-- Une chaîne sans délimiteur (ou vide) est considérée comme équilibrée (`True`).
+- Seules les lettres de l'alphabet anglais sont décalées. Les autres caractères (espaces,
+  chiffres, ponctuation) restent inchangés.
+- La casse est préservée : une majuscule reste une majuscule, une minuscule reste une minuscule.
+- Le décalage "boucle" sur l'alphabet (modulo 26), y compris pour les valeurs négatives ou
+  supérieures à 25.
 
 ## Exemples
 
 ```python
-is_balanced("()")                # True
-is_balanced("()[]{}")            # True
-is_balanced("({[]})")            # True
-is_balanced("(]")                # False
-is_balanced("([)]")              # False
-is_balanced("((())")            # False  (3 ouvertures, 2 fermetures)
-is_balanced("")                  # True
-is_balanced("abc")               # True  (aucun délimiteur)
+caesar_cipher("abc", 3)        # "def"
+caesar_cipher("xyz", 3)        # "abc"
+caesar_cipher("Hello, World!", 1)  # "Ifmmp, Xpsme!"
+caesar_cipher("abc", -1)       # "zab"
+caesar_cipher("abc", 29)       # "def"  (29 ≡ 3 mod 26)
 ```
 """).reponse
 )
