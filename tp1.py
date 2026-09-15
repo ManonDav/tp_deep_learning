@@ -28,33 +28,33 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Entier → romain
+        question="""# Recherche dichotomique
 
 Implémentez une fonction :
 
 ```python
-def int_to_roman(n: int) -> str:
+def binary_search(xs, target) -> int:
 ```
 
-qui convertit un entier strictement positif en chaîne de chiffres romains.
+qui renvoie l'indice de `target` dans la liste triée `xs`, ou `-1` si `target` n'y figure pas.
 
 Règles précises :
-- `n` est un entier tel que `1 <= n < 4000`.
-- On utilise la convention soustractive standard : `4` s'écrit `IV`, `9` s'écrit `IX`,
-  `40` s'écrit `XL`, `90` s'écrit `XC`, `400` s'écrit `CD`, `900` s'écrit `CM`.
-- Les symboles sont uniquement des majuscules.
-
-Symboles disponibles : `I=1, V=5, X=10, L=50, C=100, D=500, M=1000`.
+- `xs` est une liste **triée en ordre croissant** d'entiers (vous pouvez la supposer triée).
+- La fonction doit utiliser l'algorithme de **recherche dichotomique** en `O(log n)` :
+  elle doit diviser l'espace de recherche en deux à chaque itération en comparant `target` à
+  l'élément médian. Un parcours linéaire (`target in xs`, `xs.index`, boucle simple) n'est pas
+  acceptable.
+- S'il y a plusieurs occurrences, renvoyer n'importe quelle position valide.
+- Une liste vide renvoie `-1`.
 
 ## Exemples
 
 ```python
-int_to_roman(3)      # "III"
-int_to_roman(4)      # "IV"
-int_to_roman(9)      # "IX"
-int_to_roman(58)     # "LVIII"
-int_to_roman(1994)   # "MCMXCIV"
-int_to_roman(1)      # "I"
+binary_search([-5, 0, 3, 7, 9, 11], 7)   # 3
+binary_search([1, 2, 3, 4, 5], 1)        # 0
+binary_search([1, 2, 3, 4, 5], 5)        # 4
+binary_search([1, 2, 3, 4, 5], 0)        # -1
+binary_search([], 3)                     # -1
 ```
 """).reponse
 )
