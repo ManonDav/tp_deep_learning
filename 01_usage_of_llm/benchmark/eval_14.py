@@ -31,7 +31,11 @@ code = """def parse_csv_line(line: str) -> list:
                 i += 1
                 continue
 
-        if char == ',' and not in_quotes:
+        if char == ',' and in_quotes:
+            # Comma inside quotes does not end the field
+            current_field += char
+            i += 1
+        elif char == ',' and not in_quotes:
             # End of a field
             fields.append(current_field)
             current_field = ""
@@ -44,7 +48,6 @@ code = """def parse_csv_line(line: str) -> list:
     # Add the last field
     fields.append(current_field)
 
-    # Handle empty fields (e.g., ",")
     return fields"""
 implementation= evaluator.test_implementation("14_parse_csv_line",code )
 print(implementation)
