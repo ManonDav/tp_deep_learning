@@ -1,40 +1,44 @@
 def parse_csv_line(line: str) -> list:
+    if not line:
+        return [""]
+
     fields = []
     i = 0
     n = len(line)
+    in_quotes = False
+    current_field = ""
+
     while i < n:
-        if line[i] == '"':
-            # Start of a quoted field
-            i += 1
-            field = ''
-            while i < n:
-                if line[i] == '"':
-                    # Check for escaped quote
-                    if i + 1 < n and line[i + 1] == '"':
-                        field += '"'
-                        i += 2
-                    else:
-                        # End of the field
-                        i += 1
-                        break
-                elif line[i] == ',':
-                    # End of the field (if not inside quotes)
-                    i += 1
-                    break
-                else:
-                    field += line[i]
-                    i += 1
-            fields.append(field)
-        elif line[i] == ',':
-            # Empty field
-            fields.append("")
+        char = line[i]
+
+        if char == '"':
+            if in_quotes:
+                # Two quotes in a row represent a single quote in the value
+                if i + 1 < n and line[i + 1] == '"':
+                    current_field += '"'
+                    i += 2
+                    continue
+                # End of quoted field
+                in_quotes = False
+                i += 1
+            else:
+                # Start of quoted field
+                in_quotes = True
+                i += 1
+                continue
+
+        if char == ',' and not in_quotes:
+            # End of a field
+            fields.append(current_field)
+            current_field = ""
             i += 1
         else:
-            # Non-quoted field
-            field = ''
-            while i < n and line[i] != ',':
-                field += line[i]
-                i += 1
-            fields.append(field)
-            i += 1  # Skip the comma
+            # Add character to current field
+            current_field += char
+            i += 1
+
+    # Add the last field
+    fields.append(current_field)
+
+    # Handle empty fields (e.g., ",")
     return fields
