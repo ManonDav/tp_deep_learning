@@ -28,33 +28,33 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Fusion d'intervalles
+        question="""# Romain → entier
 
 Implémentez une fonction :
 
 ```python
-def merge_intervals(intervals):
+def roman_to_int(s: str) -> int:
 ```
 
-qui reçoit une liste d'intervalles, chacun représenté par une paire `[début, fin]` d'entiers
-(bornes incluses), et renvoie une nouvelle liste avec tous les intervalles qui se chevauchent
-ou sont adjacents fusionnés.
+qui convertit un nombre écrit en chiffres romains en entier.
 
 Règles précises :
-- Deux intervalles `[a, b]` et `[c, d]` avec `c <= b` se chevauchent ou sont adjacents et sont
-  fusionnés en `[min(a, c), max(b, d)]`.
-- Les intervalles en entrée ne sont pas nécessairement triés.
-- La liste résultante doit être **triée** par début croissant.
-- Chaque intervalle en entrée vérifie toujours `début <= fin`.
-- Une liste vide donne une liste vide.
+- L'entrée est une chaîne non vide composée uniquement de caractères romains valides
+  (`I, V, X, L, C, D, M`, en majuscules).
+- On utilise la convention soustractive standard : `IV` vaut 4, `IX` vaut 9, `XL` vaut 40,
+  `XC` vaut 90, `CD` vaut 400, `CM` vaut 900.
+- Un symbole placé avant un symbole de valeur supérieure se soustrait ; sinon il s'additionne.
+
+Valeurs de base : `I=1, V=5, X=10, L=50, C=100, D=500, M=1000`.
 
 ## Exemples
 
 ```python
-merge_intervals([[1, 3], [2, 6], [8, 10], [15, 18]])   # [[1, 6], [8, 10], [15, 18]]
-merge_intervals([[1, 4], [4, 5]])                      # [[1, 5]]   (adjacents)
-merge_intervals([[6, 8], [1, 2], [3, 5]])              # [[1, 2], [3, 5], [6, 8]]
-merge_intervals([])                                    # []
+roman_to_int("III")    # 3
+roman_to_int("IV")     # 4
+roman_to_int("IX")     # 9
+roman_to_int("LVIII")  # 58
+roman_to_int("MCMXCIV")  # 1994
 ```
 """).reponse
 )
