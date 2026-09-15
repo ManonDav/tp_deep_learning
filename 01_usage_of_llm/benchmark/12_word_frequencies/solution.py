@@ -5,13 +5,17 @@ def word_frequencies(text: str) -> dict:
     if not text:
         return {}
 
-    # Utilisation de regex pour trouver tous les mots, en ignorant la casse
-    words = re.findall(r"[\w']+", text.lower())
+    # Use regex to find all words, considering apostrophes as part of the word
+    # The regex matches sequences of letters and apostrophes, ensuring that apostrophes are part of the word
+    words = re.findall(r"[a-zA-Z]+(?:'[a-zA-Z]+)*", text)
 
-    # Comptage des fréquences
-    freq = defaultdict(int)
+    # Convert words to lowercase
+    words = [word.lower() for word in words]
+
+    # Count the frequency of each word
+    frequency = defaultdict(int)
     for word in words:
-        freq[word] += 1
+        frequency[word] += 1
 
-    # Conversion en dict standard
-    return dict(freq)
+    # Convert defaultdict to a regular dict before returning
+    return dict(frequency)
