@@ -28,35 +28,32 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Regroupement d'anagrammes
+        question="""# Fréquence des mots
 
 Implémentez une fonction :
 
 ```python
-def group_anagrams(words) -> list:
+def word_frequencies(text: str) -> dict:
 ```
 
-qui reçoit une liste de chaînes et renvoie une liste de groupes : chacun contient les mots qui
-sont des anagrammes les uns des autres (mêmes lettres, même nombre d'occurrences, casse
-insensible).
+qui renvoie un dictionnaire associant à chaque mot la fréquence de son apparition dans `text`.
 
 Règles précises :
-- Deux mots sont des anagrammes s'ils ont exactement les mêmes lettres avec les mêmes
-  fréquences, en ignorant la casse (`"Tea"` et `"eat"` sont des anagrammes).
-- La comparaison doit ignorer la casse, mais les mots du groupe sont renvoyés **tels quels**
-  (casse d'origine préservée).
-- L'ordre des groupes et l'ordre des mots dans chaque groupe ont la liberté : les résultats ne
-  sont vérifiés que comme ensembles de groupes.
-- Les chaînes non vides n'ont que des caractères alphabétiques.
+- Les mots sont délimités par tout caractère non alphabétique (espaces, ponctuation, chiffres).
+- La comparaison ignore la casse : `"The"` et `"the"` comptent pour le même mot, qui est stocké
+  en **minuscules** dans le dictionnaire.
+- Un mot peut contenir des apostrophes internes (ex. `"l'eau"`) : l'apostrophe fait partie du
+  mot.
+- Les mots n'apparaissant pas dans le texte ne figurent pas dans le dictionnaire.
+- Une chaîne vide (ou sans mot) donne un dictionnaire vide.
 
 ## Exemples
 
 ```python
-group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"])
-# ex. [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
-group_anagrams([])                       # []
-group_anagrams(["abc"])                  # [["abc"]]
-group_anagrams(["Tea", "ate", "EAT"])    # ex. [["Tea", "ate", "EAT"]]
+word_frequencies("The cat and the dog.")  # {"the": 2, "cat": 1, "and": 1, "dog": 1}
+word_frequencies("a-b c! a.")             # {"a": 2, "b": 1, "c": 1}
+word_frequencies("")                      # {}
+word_frequencies("l'eau est l'eau")       # {"l'eau": 2, "est": 1}
 ```
 """).reponse
 )
