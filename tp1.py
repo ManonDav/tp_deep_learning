@@ -28,34 +28,31 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Deux nombres dont la somme est cible
+        question="""# Préfixe commun le plus long
 
 Implémentez une fonction :
 
 ```python
-def two_sum(nums, target) -> list:
+def longest_common_prefix(strs) -> str:
 ```
 
-qui reçoit une liste d'entiers `nums` et un entier `target`, et renvoie les **indices** des deux
-éléments distincts dont la somme est égale à `target`.
+qui reçoit une liste de chaînes et renvoie le plus long préfixe commun à toutes les chaînes,
+ou la chaîne vide `""` s'il n'existe aucun préfixe commun.
 
 Règles précises :
-- On garantit qu'il existe **exactement une** paire de valeurs distinctes dont la somme vaut
-  `target`. Vous n'avez pas à gérer l'absence de solution.
-- L'ordre des deux indices renvoyés importe peu, mais les deux indices doivent être **distincts**
-  et renvoyés dans une liste.
-- Les deux éléments peuvent avoir la même valeur (ex. `[3, 3]` avec `target = 6`), mais il s'agit
-  alors de deux positions différentes.
-- Une implémentation en `O(n²)` (double boucle) fonctionne, mais une implémentation en `O(n)`
-  à l'aide d'un dictionnaire est préférée.
+- Le préfixe doit être commun à **toutes** les chaînes de la liste.
+- Si une chaîne est vide, ou si les premières lettres diffèrent dès la première position, le
+  préfixe commun est `""`.
+- La comparaison est sensible à la casse.
 
 ## Exemples
 
 ```python
-two_sum([2, 7, 11, 15], 9)   # [0, 1]
-two_sum([3, 2, 4], 6)        # [1, 2]
-two_sum([3, 3], 6)           # [0, 1]
-two_sum([1, 2, 3], 5)        # [1, 2]
+longest_common_prefix(["flower", "flow", "flight"])   # "fl"
+longest_common_prefix(["dog", "racecar", "car"])      # ""
+longest_common_prefix(["interspecies", "interstellar", "interstate"])  # "inters"
+longest_common_prefix(["", "b"])                      # ""
+longest_common_prefix(["single"])                     # "single"
 ```
 """).reponse
 )
