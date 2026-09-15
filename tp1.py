@@ -118,20 +118,42 @@ assert parse_csv_line(\'a,"b,c",d\') == ["a", "b,c", "d"]
 assert parse_csv_line(\'"  x  "\') == ["  x  "]
 assert parse_csv_line(\'""\') == [""]
 ```
-Ton implémentation ne respecte pas correctement la gestion des champs entourés de guillemets.
-
 Le problème se situe dans la logique de gestion des guillemets.
 
 Tu dois distinguer clairement les trois situations suivantes :
-
 - Un " rencontré alors que tu es en dehors d'un champ entre guillemets : il ouvre un champ entre guillemets.
 - Un " rencontré alors que tu es à l'intérieur d'un champ entre guillemets :
     si le caractère suivant est également ", alors "" représente un guillemet littéral et doit ajouter un seul " à la valeur ;
     sinon, le " ferme le champ entre guillemets.
 - Une virgule ne doit séparer deux champs que lorsqu'elle est rencontrée en dehors d'un champ entre guillemets.
 
+Par exemple, dans :
+
+'a,"b,c",d'
+
+la virgule entre b et c ne doit surtout pas créer un nouveau champ, car elle se trouve à l'intérieur des guillemets.
+
+Dans :
+
+'"hello ""world"""'
+
+les "" situés au milieu représentent un guillemet littéral. Le résultat attendu est :
+
+['hello "world"']
+
+Dans :
+
+'""'
+
+les deux guillemets représentent un champ vide et le résultat doit être :
+
+[""]
+
 Attention également à ne pas ajouter les guillemets qui servent uniquement à délimiter un champ dans la valeur finale.
 
 Revois donc la logique de parcours caractère par caractère et assure-toi qu'après avoir traité un guillemet, le même caractère n'est pas traité une deuxième fois par la logique normale du champ.
+
+Corrige l'implémentation en respectant toutes les règles de la spécification et les erreurs indiquées par les tests.
+Retourne uniquement le code Python corrigé.
 ''').reponse
 )
