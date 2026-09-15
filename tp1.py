@@ -28,32 +28,33 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Chiffrement de César
+        question="""# Fusion d'intervalles
 
 Implémentez une fonction :
 
 ```python
-def caesar_cipher(s: str, shift: int) -> str:
+def merge_intervals(intervals):
 ```
 
-qui chiffre `s` avec un décalage de César de `shift` positions dans l'alphabet (a → z).
-`shift` est un entier pouvant être négatif ou supérieur à 25.
+qui reçoit une liste d'intervalles, chacun représenté par une paire `[début, fin]` d'entiers
+(bornes incluses), et renvoie une nouvelle liste avec tous les intervalles qui se chevauchent
+ou sont adjacents fusionnés.
 
 Règles précises :
-- Seules les lettres de l'alphabet anglais sont décalées. Les autres caractères (espaces,
-  chiffres, ponctuation) restent inchangés.
-- La casse est préservée : une majuscule reste une majuscule, une minuscule reste une minuscule.
-- Le décalage "boucle" sur l'alphabet (modulo 26), y compris pour les valeurs négatives ou
-  supérieures à 25.
+- Deux intervalles `[a, b]` et `[c, d]` avec `c <= b` se chevauchent ou sont adjacents et sont
+  fusionnés en `[min(a, c), max(b, d)]`.
+- Les intervalles en entrée ne sont pas nécessairement triés.
+- La liste résultante doit être **triée** par début croissant.
+- Chaque intervalle en entrée vérifie toujours `début <= fin`.
+- Une liste vide donne une liste vide.
 
 ## Exemples
 
 ```python
-caesar_cipher("abc", 3)        # "def"
-caesar_cipher("xyz", 3)        # "abc"
-caesar_cipher("Hello, World!", 1)  # "Ifmmp, Xpsme!"
-caesar_cipher("abc", -1)       # "zab"
-caesar_cipher("abc", 29)       # "def"  (29 ≡ 3 mod 26)
+merge_intervals([[1, 3], [2, 6], [8, 10], [15, 18]])   # [[1, 6], [8, 10], [15, 18]]
+merge_intervals([[1, 4], [4, 5]])                      # [[1, 5]]   (adjacents)
+merge_intervals([[6, 8], [1, 2], [3, 5]])              # [[1, 2], [3, 5], [6, 8]]
+merge_intervals([])                                    # []
 ```
 """).reponse
 )
