@@ -28,142 +28,96 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""
-    # Regroupement d'anagrammes
+        question='''
+    # Analyse d'une ligne CSV
 
 Implémentez une fonction :
 
 ```python
-def group_anagrams(words) -> list:
+def parse_csv_line(line: str) -> list:
 ```
 
-qui reçoit une liste de chaînes et renvoie une liste de groupes : chacun contient les mots qui
-sont des anagrammes les uns des autres (mêmes lettres, même nombre d'occurrences, casse
-insensible).
+qui découpe une ligne de fichier CSV en une liste de champs (chaînes).
 
 Règles précises :
-- Deux mots sont des anagrammes s'ils ont exactement les mêmes lettres avec les mêmes
-  fréquences, en ignorant la casse (`"Tea"` et `"eat"` sont des anagrammes).
-- La comparaison doit ignorer la casse, mais les mots du groupe sont renvoyés **tels quels**
-  (casse d'origine préservée).
-- L'ordre des groupes et l'ordre des mots dans chaque groupe ont la liberté : les résultats ne
-  sont vérifiés que comme ensembles de groupes.
-- Les chaînes non vides n'ont que des caractères alphabétiques.
+- Les champs sont séparés par des virgules.
+- Un champ peut être entouré de guillemets doubles `"`. Dans ce cas :
+  - une virgule ou un retour à la ligne à l'intérieur des guillemets ne termine pas le champ ;
+  - deux guillemets consécutifs `""` à l'intérieur d'un champ entre guillemets représentent un
+    guillemet littéral dans la valeur.
+- Un champ non entre guillemets ne contient pas de guillemets : toute valeur contenant un
+  guillemet est entre guillemets.
+- Les guillemets qui entourent un champ ne font **pas** partie de la valeur renvoyée.
+- Chaque ligne est bien formée (les guillemets ouvrants ont toujours un fermant) : vous n'avez
+  pas à gérer les lignes mal formées.
+- Une ligne vide ou constituée seulement d'une virgule donne `[""]` ou `["", ""]` : chaque
+  position séparée par une virgule donne un champ, même vide.
 
 ## Exemples
 
 ```python
-group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"])
-# ex. [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
-group_anagrams([])                       # []
-group_anagrams(["abc"])                  # [["abc"]]
-group_anagrams(["Tea", "ate", "EAT"])    # ex. [["Tea", "ate", "EAT"]]
+parse_csv_line("a,b,c")                # ["a", "b", "c"]
+parse_csv_line("a,\"b,c\",d")           # ["a", "b,c", "d"]
+parse_csv_line("\"hello \"\"world\"\"\"")  # ["hello \"world\""]
+parse_csv_line("1,2,3")                # ["1", "2", "3"]
+parse_csv_line("a,")                   # ["a", ""]
 ```
-
 ## Dernière implémentation
 
 ```python
-from collections import defaultdict
+def parse_csv_line(line: str) -> list:
+    if not line:
+        return [""]
 
-def group_anagrams(words) -> list:
-    anagram_groups = defaultdict(list)
+    fields = []
+    i = 0
+    n = len(line)
+    in_quotes = False
+    current_field = ""
 
-    for word in words:
-        # Convertir le mot en minuscule pour normaliser la comparaison
-        key = word.lower()
-        anagram_groups[key].append(word)
+    while i < n:
+        char = line[i]
 
-    # Convertir les valeurs en liste de listes
-    return list(anagram_groups.values())
+        if char == '"':
+            if in_quotes:
+                # Two quotes in a row represent a single quote in the value
+                if i + 1 < n and line[i + 1] == '"':
+                    current_field += '"'
+                    i += 2
+                    continue
+                # End of quoted field
+                in_quotes = False
+                i += 1
+            else:
+                # Start of quoted field
+                in_quotes = True
+                i += 1
+                continue
+
+        if char == ',' and not in_quotes:
+            # End of a field
+            fields.append(current_field)
+            current_field = ""
+            i += 1
+        else:
+            # Add character to current field
+            current_field += char
+            i += 1
+
+    # Add the last field
+    fields.append(current_field)
+
+    # Handle empty fields (e.g., ",")
+    return fields
 ```
-
 Cette implémentation n'a pas passé tous les tests.
 Voici les tests échoués:
 ```python
-result = normalize(group_anagrams(["Tea", "ate", "EAT"]))
-expected = normalize([["Tea", "ate", "EAT"]])
-assert result == expected
-
-result = normalize(group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
-expected = normalize([["eat", "tea", "ate"], ["tan", "nat"], ["bat"]])
-assert result == expected
-``` 
-Ton implémentation ne regroupe pas correctement les anagrammes.
-Le problème vient de la manière dont tu construis la clé du dictionnaire :
-
-```python
-key = word.lower()
+assert parse_csv_line(\'"hello ""world"""\') == [\'hello "world"\']
+assert parse_csv_line(\'a,"b,c",d\') == ["a", "b,c", "d"]
+assert parse_csv_line(\'"  x  "\') == ["  x  "]
+assert parse_csv_line(\'""\') == [""]
 ```
-
-Cette clé permet seulement de regrouper les mots qui sont identiques sans tenir compte de la casse. Elle ne permet pas de reconnaître deux mots qui contiennent les mêmes lettres dans un ordre différent.
-
-Par exemple :
-
-```python
-"eat".lower()  # "eat"
-"tea".lower()  # "tea"
-"ate".lower()  # "ate"
-```
-
-Ces trois mots obtiennent donc trois clés différentes alors qu'ils sont tous des anagrammes.
-
-Il faut construire une clé qui représente les lettres du mot indépendamment de leur ordre, tout en ignorant la casse.
-
-Par exemple, après avoir converti le mot en minuscules, tu peux trier ses lettres :
-
-```python
-"eat" -> "aet"
-"tea" -> "aet"
-"ate" -> "aet"
-```
-
-Les trois mots auront alors la même clé et pourront être placés dans le même groupe.
-
-Attention : il faut conserver le mot original dans le groupe. La conversion en minuscules sert uniquement à construire la clé de comparaison. Par exemple :
-
-```python
-["Tea", "ate", "EAT"]
-```
-
-doit rester :
-
-```python
-[["Tea", "ate", "EAT"]]
-```
-
-et non devenir :
-
-```python
-[["tea", "ate", "eat"]]
-```
-
-La logique attendue est donc :
-
-1. Parcourir chaque mot de `words`.
-2. Créer une clé permettant d'identifier les anagrammes, en ignorant la casse et l'ordre des lettres.
-3. Vérifier si cette clé existe déjà dans les groupes.
-4. Si elle existe, ajouter le mot original au groupe correspondant.
-5. Sinon, créer un nouveau groupe avec ce mot.
-6. À la fin, retourner la liste des groupes.
-
-Par exemple :
-
-```python
-["eat", "tea", "tan", "ate", "nat", "bat"]
-```
-
-doit produire des groupes équivalents à :
-
-```python
-[
-    ["eat", "tea", "ate"],
-    ["tan", "nat"],
-    ["bat"]
-]
-```
-
-L'ordre des groupes et l'ordre des mots dans les groupes n'a pas d'importance.
-
-Corrige donc l'implémentation en utilisant une clé basée sur les lettres du mot plutôt que sur le mot lui-même.
-""").reponse
+Tu dois modifier ton programme pour prendre en compte les valeurs déjà entre guillemets ("").
+''').reponse
 )
