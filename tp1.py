@@ -28,29 +28,30 @@ repondre = dspy.Predict(ReponseSignature)
 
 print(
     repondre(
-        question="""# Compression par plages (RLE)
+        question="""# Aplatissement de liste
 
 Implémentez une fonction :
 
 ```python
-def run_length_encode(s: str) -> str:
+def flatten(xs):
 ```
 
-qui encode `s` par compression de plages (*run-length encoding*) : chaque suite de caractères
-identiques consécutifs est remplacée par le nombre d'occurrences suivi du caractère.
+qui aplatit récursivement une liste de listes (potentiellement imbriquées de façon arbitraire)
+en une liste plate à une seule dimension, en préservant l'ordre des éléments.
 
 Règles précises :
-- Le compte est **toujours** inclus, même s'il vaut 1 (donc `"abc"` devient `"1a1b1c"`, pas `"abc"`).
-- La comparaison est sensible à la casse : `'a'` et `'A'` sont des caractères différents.
-- Une chaîne vide donne une chaîne vide.
+- Les éléments non-listes sont conservés tels quels dans l'ordre.
+- Les listes vides imbriquées ne produisent aucun élément.
+- Si `xs` n'est pas une liste (par exemple un entier ou une chaîne), la fonction doit lever une
+  exception de type `TypeError`.
 
 ## Exemples
 
 ```python
-run_length_encode("aaabbbccd")  # "3a3b2c1d"
-run_length_encode("abcd")  # "1a1b1c1d"
-run_length_encode("")  # ""
-run_length_encode("aAaa")  # "1a1A2a"
+flatten([])                      # []
+flatten([1, 2, 3])               # [1, 2, 3]
+flatten([1, [2, [3, [4]], 5]])   # [1, 2, 3, 4, 5]
+flatten([[1, 2], [], [3]])       # [1, 2, 3]
 ```
 """).reponse
 )
